@@ -1,0 +1,147 @@
+.chess-icon {
+    background-image: url('../img/icon/chess.png');
+    background-repeat: no-repeat;
+    padding-left: 30px;
+    display: block;
+}
+
+.game-icon {
+    background-image: url('../img/icon/game.png');
+    background-repeat: no-repeat;
+    padding-left: 30px;
+    display: block;
+}
+
+.music-icon {
+    background-image: url('../img/icon/music.png');
+    background-repeat: no-repeat;
+    padding-left: 30px;
+    display: block;
+}
+
+@media (min-width: 768px) {
+    #user_picture {
+        max-width: 60%;
+        height: auto;
+        margin-left: 0;
+        float: left;
+        margin-right: auto;
+        padding-right: 1em;
+        border-right: 0.1em solid grey;
+    }
+    #information {
+        padding-bottom: 1em;
+        padding-left: 1em;
+    }
+    #control {
+        text-align: center;
+    }
+    .control-button {
+        width: 20%;
+        height: auto;
+        display: inline-block;
+        margin: 1em 1em 1em 1em;
+    }
+    #card-part {
+        display: block;
+    }
+    #logo {
+        width: 20%;
+        height: auto;
+        margin: 0.4em 0.4em 0.4em 0.4em;
+    }
+    .center {
+        margin: 1.2em;
+        text-align: justify;
+    }
+    .card {
+        border: 0.1em solid #c0c0c0;
+        width: 35%;
+        height: auto;
+        overflow: auto;
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0.2em 0.2em 0.2em #c0c0c0;
+        border-radius: 0.5em;
+    }
+    h1 {
+        display: inline;
+        margin-top: 0;
+        font-size: 2.5em;
+        padding-top: 0;
+    }
+    h2 {
+        display: inline;
+        padding-left: 0.7em;
+        color: grey;
+        font-size: 1.7em;
+        font-weight: 400;
+        padding-top: 0;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    #information {
+        margin: 1em 0 0;
+        padding-bottom: 1em;
+        border-top: 0.1em solid grey;
+    }
+    #logo {
+        width: 40%;
+        height: auto;
+        margin: 0.4em 0.4em 0.4em 0.4em;
+    }
+    .card {
+        border: 0.1em solid #c0c0c0;
+        width: 80%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0.2em 0.2em 0.2em #c0c0c0;
+        border-radius: 0.5em;
+    }
+    h1 {
+        display: inline;
+        font-size: 2em;
+        margin-top: 0;
+        padding-top: 0;
+        margin-left: 0.5em;
+    }
+    h2 {
+        display: inline;
+        padding-left: 0.7em;
+        color: grey;
+        font-size: 1.2em;
+        margin-top: 0;
+        font-weight: 400;
+        padding-top: 0;
+    }
+    #user_picture {
+        max-width: 60%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #control {
+        text-align: center;
+    }
+    .control-button {
+        width: 15%;
+        height: auto;
+        display: inline-block;
+        margin: 0.5em 1em 1em 1em;
+    }
+}
+
+#interest {
+    padding-top: 1em;
+    margin-left: 0.5em;
+}
+
+span {
+    padding: 0.3em 0.3em 0.3em 0.3em;
+}
+
