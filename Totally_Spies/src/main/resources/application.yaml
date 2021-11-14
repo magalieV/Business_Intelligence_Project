@@ -1,0 +1,19 @@
+jwt:
+  secret: qrSsuGQaPWHyjwWTyVe
+  expirationDateInMs: 86400000
+spring:
+  h2:
+    console:
+      enabled: true # Whether to enable the console.
+      path: /h2-console    # Path at which the console is available.
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/bi_db
+    username: local_user
+    password: pass
