@@ -30,6 +30,7 @@ b {
     border: solid 5px rgb(167, 167, 114);
     border-radius: 30px;
     color: rgba(6, 2, 37, 0.801);
+    background-image: url("../img/user.png");
     margin-top: 5em;
 }
 
