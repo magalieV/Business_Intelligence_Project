@@ -4,21 +4,34 @@
     <meta charset="UTF-8">
     <title>Totally Spies - Profile</title>
     <!-- stylesheet -->
-    <link href="css/profile.css" rel="stylesheet">
+    <link href="../static/css/profile.css" rel="stylesheet">
 </head>
 <body>
 <div class="background">
-    <img src="img/user.png" alt="User"><br><br>
+    <img src="../static/img/user.png" alt="User"><br><br>
     <b>Tina Rose</b>
 </div>
 <div class="box-list">
     <button type="button" id="add-list" onclick="myFunction()">Add an interest</button>
     <button type="button" id="add-list" onclick="myFunction()">Delete an interest</button><br><br>
-    <h2>Choose an interest : </h2><br>
-    <input type=text list=browsers>
-    <datalist id=browsers>
-        <option> interest 1
-        <option> interest 2
-    </datalist>
+    <label for="select-title">Choose an interest:</label><br>
+        <select name="demo" id="interest-select">
+            <option value="">--Please choose an interest--</option>
+            <option value="interest-1">Dance</option>
+            <option value="interest-2">Music</option>
+            <option value="interest-3">Swimming</option>
+            <option value="interest-4">Football</option>
+            <option value="interest-5">Shooping</option>
+        </select>
+        <p id="demo" name="demo"></p>
+        <!--<script>
+           function addOption(){
+            var sel = document.getElementById("demo");
+            var option = document.createElement("option");
+            option.innerHTML = "name";
+            option.value = "1";
+            sel.appendChild(option);
+            }
+        </script>-->
 </div>
 </body>
