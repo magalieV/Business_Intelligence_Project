@@ -90,14 +90,8 @@ public class Settings extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/register").permitAll()
-                .antMatchers("/main").permitAll()
-                .antMatchers("/profile").authenticated()
-                .antMatchers("/oauth/register").authenticated()
-                .antMatchers("/services",
-                        "/service-card/*",
-                        "/service-card.html",
-                        "/widgets").permitAll()
-                .anyRequest().permitAll();
+                .antMatchers("/signin").permitAll()
+                .antMatchers("/login").permitAll();
     }
 
     ///
@@ -121,7 +115,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
         public void onAuthenticationFailure(javax.servlet.http.HttpServletRequest request,
                                             javax.servlet.http.HttpServletResponse response,
                                             AuthenticationException exception) throws IOException, ServletException {
-            redirectStrategy.sendRedirect(request, response, "/");
+            redirectStrategy.sendRedirect(request, response, "/signin");
         }
     }
 
@@ -134,7 +128,7 @@ public class Settings extends WebSecurityConfigurerAdapter {
         @Override
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                     Authentication authentication) throws IOException, ServletException {
-            redirectStrategy.sendRedirect(request, response, "/");
+            redirectStrategy.sendRedirect(request, response, "/signin");
         }
     }
 

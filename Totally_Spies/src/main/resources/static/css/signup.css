@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #666666;
+    font-family: "Open Sans", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Raleway", sans-serif;
+}
+
+#signup-form {
+    display: table;
+    width: 100%;
+    height: 100vh;
+    background-image: url(../img/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media (min-width: 1024px) {
+    #signup-form {
+        background-attachment: fixed;
+    }
+}
+
+#signup-form .signup-container {
+    background: rgba(0, 0, 0, 0.8);
+    width: 300px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+    background: #fff;
+    padding: 20px;
+    margin: 8% auto 0;
+    text-align: center;
+}
+
+#signup-form .actions a {
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px;
+    transition: 0.5s;
+    margin: 10px 0;
+    width: 92%;
+}
+
+#signup-form .submit-button {
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px;
+    transition: 0.5s;
+    margin: 10px 0;
+    width: 100%;
+    background: #328dc2;
+    border: 2px solid #328dc2;
+    color: #fff;
+}
+
+#signup-form .submit-button:hover {
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    border-radius: 10px;
+    padding: 10px;
+    transition: 0.5s;
+    margin: 10px 0;
+    width: 100%;
+    background: #42b3f5;
+    border: 2px solid #42b3f5;
+    color: #fff;
+}
+
+.signup-container h1 {
+    font-family: "Raleway", sans-serif;
+    color: #328dc2;
+    margin-bottom: 30px;
+}
+
+.input-box {
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 13px;
+    margin: 10px 0px;
+    width: 100%;
+    border: 1px solid #999;
+    outline: none;
+}
+
+.redirect-sign-in {
+    color: #42b3f5;
+}
+
+.redirect-sign-in:hover {
+    color: #328dc2;
+}
+
+.OR {
+    background: #fff;
+    width: 30px;
+    margin: -19px auto;
+    padding-bottom: 20px;
+}
+
+img {
+    max-width: 23%;
+    margin-top: -60px;
+}
