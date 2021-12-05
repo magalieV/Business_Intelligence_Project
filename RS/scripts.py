@@ -15,13 +15,16 @@ def add_users(nb_users):
         interests = []
         for j in range(10):
             interests.append("interest" + str(random.randint(1, 217)))
-        data = {
+        user = {
             u'first name': names.get_first_name(),
             u'last name': names.get_last_name(),
             u'interests': interests
         }
-        # Add a new doc in collection 'cities' with ID 'LA'
-        db.collection(u'totallySpies').document(u'C').collection('users').add(data)
+
+        user_interests_dict = {interest: "1" for interest in user['interests']}
+        right_group = find_right_group(user_interests_dict)
+
+        db.collection(u'totallySpies').document(right_group).collection('users').add(user)
 
 
 def parse_interest(document_name):
@@ -64,6 +67,7 @@ def find_right_group(user_interests):
 
         print("Group : {}, Common interests : {}".format(key, value.intersection(set_user)))
     print("\n// Match Groups : {}\n// Common interests : {}".format(right_group['group'], right_group['value']))
+    return right_group['group']
 
 
 def main():

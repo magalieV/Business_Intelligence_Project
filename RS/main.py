@@ -17,8 +17,6 @@ def index():
 
 @app.route('/users', methods=['POST'])
 def add_user():
-    right_group = []
-
     user = {
         'first_name': request.json['first_name'],
         'last_name': request.json['last_name'],
