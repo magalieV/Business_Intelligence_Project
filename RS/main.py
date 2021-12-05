@@ -1,3 +1,6 @@
+import random
+import names
+
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -5,6 +8,20 @@ cred = credentials.Certificate("hallowed-welder-297014-042131c68dd6.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+
+
+def add_users(nb_users):
+    for i in range(nb_users):
+        interests = []
+        for j in range(10):
+            interests.append("interest" + str(random.randint(1, 217)))
+        data = {
+            u'first name': names.get_first_name(),
+            u'last name': names.get_last_name(),
+            u'interests': interests
+        }
+        # Add a new doc in collection 'cities' with ID 'LA'
+        db.collection(u'totallySpies').document(u'C').collection('users').add(data)
 
 
 def parse_interest(document_name):
@@ -46,35 +63,36 @@ def find_right_group(interest_group_c, interest_group_r, interest_group_p, inter
 
 
 def main():
-    user_interestsA = {  # VARIABLE FOR TESTING PURPOSES
-        "interest1": "1",
-        "interest207": "1",
-        "interest134": "1",
-        "interest59": "1",
-        "interest64": "1",
-        "interest137": "1",
-        "interest23": "1",
-        "interest9": "1",
-        "interest14": "1",
-        "interest89": "1",
-    }
-    user_interestsB = {  # VARIABLE FOR TESTING PURPOSES
-        "interest33": "1",
-        "interest12": "1",
-        "interest45": "1",
-        "interest153": "1",
-        "interest198": "1",
-        "interest109": "1",
-        "interest178": "1",
-        "interest200": "1",
-        "interest202": "1",
-        "interest217": "1",
-    }
-    interest_group_c = parse_interest('C')
-    interest_group_i = parse_interest('I')
-    interest_group_p = parse_interest('P')
-    interest_group_r = parse_interest('R')
-    find_right_group(interest_group_c, interest_group_r, interest_group_p, interest_group_i, user_interestsB)
+    add_users(10)
+    # user_interestsA = {  # VARIABLE FOR TESTING PURPOSES
+    #     "interest1": "1",
+    #     "interest207": "1",
+    #     "interest134": "1",
+    #     "interest59": "1",
+    #     "interest64": "1",
+    #     "interest137": "1",
+    #     "interest23": "1",
+    #     "interest9": "1",
+    #     "interest14": "1",
+    #     "interest89": "1",
+    # }
+    # user_interestsB = {  # VARIABLE FOR TESTING PURPOSES
+    #     "interest33": "1",
+    #     "interest12": "1",
+    #     "interest45": "1",
+    #     "interest153": "1",
+    #     "interest198": "1",
+    #     "interest109": "1",
+    #     "interest178": "1",
+    #     "interest200": "1",
+    #     "interest202": "1",
+    #     "interest217": "1",
+    # }
+    # interest_group_c = parse_interest('C')
+    # interest_group_i = parse_interest('I')
+    # interest_group_p = parse_interest('P')
+    # interest_group_r = parse_interest('R')
+    # find_right_group(interest_group_c, interest_group_r, interest_group_p, interest_group_i, user_interestsA)
 
 
 if __name__ == "__main__":
