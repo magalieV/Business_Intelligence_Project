@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
 <html lang="en">
 <head>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -21,17 +21,17 @@
 </nav>
 <section>
     <div class="card">
-        <img id="user_picture" src="img/users/josh.jpg" title="user_picture" alt="Tinder Photo" />
+        <img id="user_picture" th:src="${picture}" title="user_picture" alt="Photo" />
         <div id="card-part">
             <div id="information">
                 <div id="main-information">
-                    <h1 id="name">Josh</h1>
-                    <h2 id="age">22</h2>
+                    <h1 id="name" th:text="${name}"></h1>
+                    <h2 id="age" th:text="${age}"></h2>
                 </div>
-                <div id="interest">
-                    <span class="chess-icon">Chess</span>
-                    <span class="music-icon">Music</span>
-                    <span class="game-icon">Game</span>
+                <div id="interest" >
+                    <div th:each = "element : ${interestList}">
+                        <span th:class="${element.className}" th:text="${element.name}"></span>
+                    </div>
                 </div>
             </div>
             <div id="control">

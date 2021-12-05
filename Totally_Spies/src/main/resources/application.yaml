@@ -1,3 +1,5 @@
+server:
+  port: 8081
 jwt:
   secret: qrSsuGQaPWHyjwWTyVe
   expirationDateInMs: 86400000

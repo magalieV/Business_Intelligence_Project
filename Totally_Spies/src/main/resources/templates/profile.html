@@ -9,8 +9,8 @@
 </head>
 <body>
 <div class="background">
-    <img src="img/user.png" alt="User"><br><br>
-    <p id="user-name">Tina Rose</p>
+    <img th:src="${picture}" alt="User"><br><br>
+    <p id="user-name" th:text="${username}"></p>
 </div>
 <div class="box-list">
     <div id="container">
@@ -18,8 +18,12 @@
             <br><label for="name" id="interest-title">Add An Interest : </label><br>
             <input type="text" id="name" placeholder="Enter an interest" autocomplete="off"><br>
             <button id="btnAdd">Add</button><br><br>
-            <label for="list">List Of Interest :</label><br><br>
-            <select id="list" name="list" ></select><br><br>
+            <label>List Of Interest :</label><br><br>
+            <div id="interest">
+                <div th:each = "element : ${interestList}">
+                    <span th:text="${element}"></span>
+                </div>
+            </div>
             <button id="btnRemove">Remove Selected Interest</button>
         </form>
     </div>
