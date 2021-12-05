@@ -33,7 +33,13 @@ img {
     color: rgba(6, 2, 37, 0.801);
 }
 
-#add-list, #del-list {
+#name {
+    margin-bottom: 2em;
+    margin-top: 3em;
+    background-color: rgb(214, 214, 187);
+}
+
+#btnAdd, #btnRemove {
     background-color: rgb(167, 167, 114);
     border: none;
     color: white;
@@ -42,7 +48,10 @@ img {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin-top: 2em;
+}
+
+#list {
+    background-color: rgb(214, 214, 187); 
 }
 
 h2 {
