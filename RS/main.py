@@ -1,6 +1,4 @@
-import random
-import names
-
+from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, firestore
 
@@ -9,35 +7,49 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
-
-def add_users(nb_users):
-    for i in range(nb_users):
-        interests = []
-        for j in range(10):
-            interests.append("interest" + str(random.randint(1, 217)))
-        data = {
-            u'first name': names.get_first_name(),
-            u'last name': names.get_last_name(),
-            u'interests': interests
-        }
-        # Add a new doc in collection 'cities' with ID 'LA'
-        db.collection(u'totallySpies').document(u'C').collection('users').add(data)
+app = Flask(__name__)
 
 
-def parse_interest(document_name):
-    result = db.collection('totallySpies').document(document_name).get()
-
-    if result.exists:
-        parsed_dict = {k: v for k, v in result.to_dict().items() if v}
-        return parsed_dict
+@app.route('/')
+def index():
+     return "TotallySpies is so Fun hihi"
 
 
-def find_right_group(interest_group_c, interest_group_r, interest_group_p, interest_group_i, user_interests):
+@app.route('/users', methods=['POST'])
+def add_user():
+    right_group = []
+
+    user = {
+        'first_name': request.json['first_name'],
+        'last_name': request.json['last_name'],
+        'interests': request.json['interests']
+    }
+
+    user_interests_dict = {interest: "1" for interest in user['interests']}
+    right_group = find_right_group(user_interests_dict)
+
+    data = {
+        u'first name': user['first_name'],
+        u'last name': user['last_name'],
+        u'interests': user['interests']
+    }
+    # Add a new doc in collection 'cities' with ID 'LA'
+    for i in right_group:
+        db.collection(u'totallySpies').document(i).collection('users').add(data)
+
+    return jsonify(right_group)
+
+
+def find_right_group(user_interests):
+    interest_group_c = parse_interest('C')
+    interest_group_i = parse_interest('I')
+    interest_group_p = parse_interest('P')
+    interest_group_r = parse_interest('R')
     groups_dict = {
-        "group_I": set(interest_group_i),
-        "group_P": set(interest_group_p),
-        "group_R": set(interest_group_r),
-        "group_C": set(interest_group_c)
+        "I": set(interest_group_i),
+        "P": set(interest_group_p),
+        "R": set(interest_group_r),
+        "C": set(interest_group_c)
     }
     set_user = set(user_interests)
     right_group = {
@@ -58,42 +70,16 @@ def find_right_group(interest_group_c, interest_group_r, interest_group_p, inter
             right_group['group'].append(key)
             right_group['value'].append(value.intersection(set_user))
 
-        print("Group : {}, Common interests : {}".format(key, value.intersection(set_user)))
-    print("\n// Match Groups : {}\n// Common interests : {}".format(right_group['group'], right_group['value']))
+    return right_group['group']
 
 
-def main():
-    add_users(10)
-    # user_interestsA = {  # VARIABLE FOR TESTING PURPOSES
-    #     "interest1": "1",
-    #     "interest207": "1",
-    #     "interest134": "1",
-    #     "interest59": "1",
-    #     "interest64": "1",
-    #     "interest137": "1",
-    #     "interest23": "1",
-    #     "interest9": "1",
-    #     "interest14": "1",
-    #     "interest89": "1",
-    # }
-    # user_interestsB = {  # VARIABLE FOR TESTING PURPOSES
-    #     "interest33": "1",
-    #     "interest12": "1",
-    #     "interest45": "1",
-    #     "interest153": "1",
-    #     "interest198": "1",
-    #     "interest109": "1",
-    #     "interest178": "1",
-    #     "interest200": "1",
-    #     "interest202": "1",
-    #     "interest217": "1",
-    # }
-    # interest_group_c = parse_interest('C')
-    # interest_group_i = parse_interest('I')
-    # interest_group_p = parse_interest('P')
-    # interest_group_r = parse_interest('R')
-    # find_right_group(interest_group_c, interest_group_r, interest_group_p, interest_group_i, user_interestsA)
+def parse_interest(document_name):
+    result = db.collection('totallySpies').document(document_name).get()
+
+    if result.exists:
+        parsed_dict = {k: v for k, v in result.to_dict().items() if v}
+        return parsed_dict
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(debug=True, port=8080)
