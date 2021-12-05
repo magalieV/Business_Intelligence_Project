@@ -33,6 +33,17 @@ img {
     color: rgba(6, 2, 37, 0.801);
 }
 
+.box-information {
+    width: 46%;
+    height: 30%;
+    background-color:rgb(221, 221, 189);
+    margin: auto;
+    padding: 0 30px 20px;
+    border: solid 5px rgb(167, 167, 114);
+    border-radius: 30px;
+    color: rgba(6, 2, 37, 0.801);
+}
+
 #name {
     margin-bottom: 2em;
     margin-top: 3em;
@@ -52,6 +63,8 @@ img {
 
 #list {
     background-color: rgb(214, 214, 187); 
+    height: 10em;
+    width: 20em;
 }
 
 h2 {

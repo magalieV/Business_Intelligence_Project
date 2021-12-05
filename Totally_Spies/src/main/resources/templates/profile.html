@@ -8,68 +8,89 @@
     <script src="js/profile.js"></script>
 </head>
 <body>
-<div class="background">
-    <img th:src="${picture}" alt="User"><br><br>
-    <p id="user-name" th:text="${username}"></p>
-</div>
+    <div class="background">
+        <img th:src="${picture}" alt="User"><br><br>
+        <!--<img src="../static/img/user.png" alt="User"><br><br>-->
+    </div>
+<div class="box-information">
+    <div id="information">
+        <form>
+            <div class="background">
+                <br>
+                <b>User Name : </b><br><br>
+               <!-- <label for="user-name">Tina Rose</label><br><br>-->
+               <p id="user-name" th:text="${username}"></p>
+                <b>Birth Date : <br /><br>
+                    <input type="date" name="date" value="1997-07-22"/>
+                <p><label>User Gender: </label> <br><br>
+                    <input type="radio" name="type" value="Miss" checked/>Miss<br>
+                    <input type="radio" name="type" value="Mr"/>Mr<br>
+                    <input type="radio" name="type" value="Other"/>Other<br>
+                </p>
+            </div>
+        </form>
+    </div>
+</div><br>
 <div class="box-list">
     <div id="container">
         <form>
-            <br><label for="name" id="interest-title">Add An Interest : </label><br>
+            <br>
+            <label for="name">Add An Interest :</label><br>
             <input type="text" id="name" placeholder="Enter an interest" autocomplete="off"><br>
             <button id="btnAdd">Add</button><br><br>
-            <label>List Of Interest :</label><br><br>
+            <label for="list">List Of Interest :</label><br><br>
             <div id="interest">
                 <div th:each = "element : ${interestList}">
                     <span th:text="${element}"></span>
                 </div>
             </div>
+            <select id="list" name="list" multiple></select><br><br>
             <button id="btnRemove">Remove Selected Interest</button>
         </form>
     </div>
-</div>
+</div><br>
 <script>
     const btnAdd = document.querySelector('#btnAdd');
-    const btnRemove = document.querySelector('#btnRemove');
-    const sb = document.querySelector('#list');
-    const name = document.querySelector('#name');
+        const btnRemove = document.querySelector('#btnRemove');
+        const sb = document.querySelector('#list');
+        const name = document.querySelector('#name');
 
-    btnAdd.onclick = (e) => {
-        e.preventDefault();
+        btnAdd.onclick = (e) => {
+            e.preventDefault();
 
-        // validate the option
-        if (name.value == '') {
-            alert('Please enter the name.');
-            return;
-        }
-        // create a new option
-        const option = new Option(name.value, name.value);
-        // add it to the list
-        sb.add(option, undefined);
-
-        // reset the value of the input
-        name.value = '';
-        name.focus();
-    };
-
-    // remove selected option
-    btnRemove.onclick = (e) => {
-        e.preventDefault();
-
-        // save the selected option
-        let selected = [];
-
-        for (let i = 0; i < sb.options.length; i++) {
-            selected[i] = sb.options[i].selected;
-        }
-
-        // remove all selected option
-        let index = sb.options.length;
-        while (index--) {
-            if (selected[index]) {
-                sb.remove(index);
+            // validate the option
+            if (name.value == '') {
+                alert('Please enter the name.');
+                return;
             }
-        }
-    };
+            // create a new option
+            const option = new Option(name.value, name.value);
+            // add it to the list
+            sb.add(option, undefined);
+
+            // reset the value of the input
+            name.value = '';
+            name.focus();
+        };
+
+        // remove selected option
+        btnRemove.onclick = (e) => {
+            e.preventDefault();
+
+            // save the selected option
+            let selected = [];
+
+            for (let i = 0; i < sb.options.length; i++) {
+                selected[i] = sb.options[i].selected;
+            }
+
+            // remove all selected option
+            let index = sb.options.length;
+            while (index--) {
+                if (selected[index]) {
+                    sb.remove(index);
+                }
+            }
+        };
 </script>
 </body>
