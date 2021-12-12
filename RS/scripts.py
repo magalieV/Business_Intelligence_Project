@@ -17,8 +17,8 @@ def add_users(nb_users):
         interests = random.sample(all_hobbies, 3)
         print(interests)
         user = {
-            u'first name': names.get_first_name(),
-            u'last name': names.get_last_name(),
+            u'firstName': names.get_first_name(),
+            u'lastName': names.get_last_name(),
             u'interests': interests,
             u'points': get_user_points(interests)
         }
