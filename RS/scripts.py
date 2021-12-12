@@ -26,6 +26,21 @@ def add_users(nb_users):
 
         db.collection(u'totallySpies').document(right_group).collection('users').add(user)
 
+def get_user(document_name):
+    all_groups = ["C", "I", "P", "R"]
+    all_users_in_group = None
+
+    for i in all_groups:
+        doc_ref = db.collection(u'totallySpies').document(i).collection('users').document(document_name)
+        doc = doc_ref.get()
+        if doc.exists:
+            print(doc.to_dict())
+            all_users_in_group = db.collection('totallySpies').document(i).collection('users').stream()
+            break
+    all_users = []
+    for users in all_users_in_group:
+        all_users.append({k: v for k, v in users.to_dict().items() if v})
+    return all_users
 
 def parse_interest(document_name):
     result = db.collection('totallySpies').document(document_name).get()
@@ -100,8 +115,9 @@ def main():
     #     "interest202": "1",
     #     "interest217": "1",
     # }
-    find_right_group(user_interest_form)
 
+    #find_right_group(user_interest_form)
+    print(get_user("eT1plVcx7CO1PND23gQB"))
 
 if __name__ == "__main__":
     main()

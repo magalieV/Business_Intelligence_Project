@@ -15,6 +15,37 @@ def index():
      return "TotallySpies is so Fun hihi"
 
 
+@app.route('/user_info', methods=['GET'])
+def get_user_info():
+    all_groups = ["C", "I", "P", "R"]
+    document_name = request.args.get("user_id")
+
+    for i in all_groups:
+        doc_ref = db.collection(u'totallySpies').document(i).collection('users').document(document_name)
+        doc = doc_ref.get()
+        if doc.exists:
+            return jsonify(doc.to_dict())
+
+
+@app.route('/matched_users', methods=['GET'])
+def get_user_possible_matchable_users():
+    all_groups = ["C", "I", "P", "R"]
+    all_users_in_group = None
+    document_name = request.args.get("user_id")
+
+    for i in all_groups:
+        doc_ref = db.collection(u'totallySpies').document(i).collection('users').document(document_name)
+        doc = doc_ref.get()
+        if doc.exists:
+            print(doc.to_dict())
+            all_users_in_group = db.collection('totallySpies').document(i).collection('users').stream()
+            break
+    all_users = []
+    for users in all_users_in_group:
+        all_users.append({k: v for k, v in users.to_dict().items() if v})
+    return jsonify(all_users)
+
+
 @app.route('/users', methods=['POST'])
 def add_user():
     user = {
@@ -31,11 +62,13 @@ def add_user():
         u'last name': user['last_name'],
         u'interests': user['interests']
     }
-    # Add a new doc in collection 'cities' with ID 'LA'
-    for i in right_group:
-        db.collection(u'totallySpies').document(i).collection('users').add(data)
 
-    return jsonify(right_group)
+    #for i in right_group:
+    #    db.collection(u'totallySpies').document(i).collection('users').add(data)
+    doc_ref = db.collection(u'totallySpies').document(right_group[0]).collection('users').document()
+    #right_group.append(doc_ref)
+    doc_ref.set(data)
+    return jsonify(doc_ref.id)
 
 
 def find_right_group(user_interests):
