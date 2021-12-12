@@ -23,17 +23,17 @@ def index():
 @app.route('/user_info', methods=['POST'])
 def update_user_info():
     user = {
-        'first_name': request.json['first_name'],
-        'last_name': request.json['last_name'],
+        'firstName': request.json['firstName'],
+        'lastName': request.json['lastName'],
         'interests': request.json['interests']
     }
 
     user_points = get_user_points(user['interests'])
 
-    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.json["user_id"])
+    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.json["userId"])
     doc_ref.update({
-        db.field_path(u'first name'): user['first_name'],
-        db.field_path(u'last name'): user['last_name'],
+        db.field_path(u'firstName'): user['firstName'],
+        db.field_path(u'lastName'): user['lastName'],
         u'interests': user['interests'],
         u'points': user_points
     })
@@ -82,16 +82,16 @@ def get_user_possible_matchable_users():
 @app.route('/users', methods=['POST'])
 def add_user():
     user = {
-        'first_name': request.json['first_name'],
-        'last_name': request.json['last_name'],
+        'firstName': request.json['firstName'],
+        'lastName': request.json['lastName'],
         'interests': request.json['interests']
     }
 
     user_points = get_user_points(user['interests'])
 
     data = {
-        u'first name': user['first_name'],
-        u'last name': user['last_name'],
+        u'firstName': user['firstName'],
+        u'lastName': user['lastName'],
         u'interests': user['interests'],
         u'points': user_points
     }

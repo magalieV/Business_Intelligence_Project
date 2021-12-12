@@ -153,7 +153,7 @@ def main():
     # }
 
     #find_right_group(user_interest_form)
-    add_users(100)
+    add_users(1000)
     #find_right_group("ok")
 
 if __name__ == "__main__":
