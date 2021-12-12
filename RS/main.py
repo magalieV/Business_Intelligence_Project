@@ -20,7 +20,7 @@ def index():
      return "TotallySpies is so Fun hihi"
 
 
-@app.route('/user_info', methods=['PUT'])
+@app.route('/user_info', methods=['POST'])
 def update_user_info():
     user = {
         'first_name': request.json['first_name'],
@@ -30,7 +30,7 @@ def update_user_info():
 
     user_points = get_user_points(user['interests'])
 
-    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.args.get("user_id"))
+    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.json["user_id"])
     doc_ref.update({
         db.field_path(u'first name'): user['first_name'],
         db.field_path(u'last name'): user['last_name'],
