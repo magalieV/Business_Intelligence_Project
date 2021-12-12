@@ -19,24 +19,21 @@
         </ul>
     </div>
 </nav>
-<section>
-    <div class="card">
-        <img id="user_picture" th:src="${picture}" title="user_picture" alt="Photo" />
-        <div id="card-part">
-            <div id="information">
-                <div id="main-information">
-                    <h1 id="name" th:text="${name}"></h1>
-                    <h2 id="age" th:text="${age}"></h2>
-                </div>
-                <div id="interest" >
-                    <div th:each = "element : ${interestList}">
-                        <span th:class="${element.className}" th:text="${element.name}"></span>
+<section id="centerAll">
+    <div class="usersRecomandation" th:each = "user : ${userList}">
+        <div class="card">
+            <img id="user_picture" title="user_picture" alt="Photo" src="img/user.png"/>
+            <div id="card-part">
+                <div id="information">
+                    <div id="main-information">
+                        <h1 id="name" th:text="${user.globalName}">Name</h1>
+                    </div>
+                    <div id="interest" >
+                        <div th:each = "element : ${user.interests}">
+                            <span th:text="${element}"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="control">
-                <img class="control-button" src="img/icon/cross.png" alt="Pass">
-                <img class="control-button" src="img/icon/chat.png" alt="Chat">
             </div>
         </div>
     </div>

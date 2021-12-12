@@ -25,27 +25,23 @@ jQuery(document).ready(function( $ ) {
 
 window.onload = function()
 {
-    add = document.getElementById("add_element");
-    form = document.getElementById("Form");
+    let add = document.getElementById("add_element");
+    let form = document.getElementById("Form");
 
     console.log(form);
     form.addEventListener("submit", validateForm);
 
 
     add.addEventListener("click", function() {
-        interestElement = document.getElementById("user_interest");
-        selectInterest = document.getElementById("interest_list");
-        interestL = document.getElementsByClassName("interest-info");
+        let interestElement = document.getElementById("user_interest");
+        let selectInterest = document.getElementById("interest_list");
+        let interestL = document.getElementsByClassName("interest-info");
 
-        console.log(interestL);
         if (selectInterest.value && selectInterest.value.trim().length > 1) {
             for (let i = 0; i < interestL.length; i++) {
-                console.log(selectInterest.value);
-                console.log(interestL[i].innerHTML);
-                console.log("Next");
                 if (selectInterest.value === interestL[i].innerHTML)
                     return;
-            };
+            }
             let newNode = document.createElement("p");
             newNode.innerHTML = selectInterest.value;
             newNode.className = "interest-info";
@@ -55,13 +51,14 @@ window.onload = function()
 
     function validateForm(event)
     {
-        pass = document.getElementById("password");
-        passVer = document.getElementById("password_verification");
+        let pass = document.getElementById("password");
+        let passVer = document.getElementById("password_verification");
         if (passVer.value !== pass.value) {
             event.preventDefault();
         }
-        name = document.getElementById("personName").value;
-        interests = document.getElementsByClassName("interest-info");
+        let name = document.getElementById("personName").value;
+        let lastName = document.getElementById("personLastName").value;
+        let interests = document.getElementsByClassName("interest-info");
         let listOfObjects = [];
         for (let i = 0; i < interests.length; i++) {
             listOfObjects.push(interests[i].innerHTML);
@@ -75,8 +72,9 @@ window.onload = function()
 
         var params = {
             "personName": name,
+            "lastName": lastName,
             "password": pass.value,
-            "interest": listOfObjects
+            "interests": listOfObjects
         }
 
         xhr.send(JSON.stringify(params));

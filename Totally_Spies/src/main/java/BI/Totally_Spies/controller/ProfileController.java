@@ -1,6 +1,7 @@
 package BI.Totally_Spies.controller;
 
 import BI.Totally_Spies.database.models.User;
+import BI.Totally_Spies.service.CallRS;
 import BI.Totally_Spies.service.Hash;
 import BI.Totally_Spies.service.UserInformation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +18,17 @@ import java.util.List;
 public class ProfileController {
     @Autowired
     UserInformation userInformation;
+    private CallRS callRS = new CallRS();
 
     @RequestMapping("/profile")
     public ModelAndView getHomePage(@AuthenticationPrincipal OAuth2User principal) {
         ModelAndView mav = new ModelAndView();
         User user = userInformation.getInformation(principal);
-        List<String> interest = new ArrayList<String>();
 
-        interest.add("Baseball");
-        interest.add("Ice Skating");
         String url = "https://www.gravatar.com/avatar/" + Hash.md5Hex(user.getUsername()) + "?d=robohash";
-        mav.addObject("username", user.getUsername());
+        mav.addObject("username", user.getUsername() + " " + user.getLastname());
         mav.addObject("picture", url);
-        mav.addObject("interestList", interest);
+        mav.addObject("interestList", callRS.getUserInterest(user.getRsId()));
         mav.setViewName("profile");
         return mav;
     }

@@ -4,10 +4,12 @@ import BI.Totally_Spies.database.Interest;
 import BI.Totally_Spies.database.WrapperInfo;
 import BI.Totally_Spies.database.models.User;
 import BI.Totally_Spies.database.repositories.UserRepository;
-import BI.Totally_Spies.service.Hash;
+import BI.Totally_Spies.service.CallRS;
+import BI.Totally_Spies.service.UserInformation;
 import org.json.JSONObject;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -27,19 +28,21 @@ public class MainController {
     UserRepository userRepository;
     @Autowired
     PasswordEncoder encoder;
+    @Autowired
+    UserInformation userInformation;
+    private CallRS callRS = new CallRS();
 
     @RequestMapping("/main")
-    public ModelAndView getHomePage() {
+    public ModelAndView getHomePage(@AuthenticationPrincipal OAuth2User principal) {
         ModelAndView mav = new ModelAndView();
-        List<Interest> interestList = new ArrayList<Interest>();
+        User user = userInformation.getInformation(principal);
 
-        interestList.add(new Interest("Chess", "chess-icon"));
-        interestList.add(new Interest("Music", "music-icon"));
-        interestList.add(new Interest("Game", "game-icon"));
-        mav.addObject("name", "Josh");
-        mav.addObject("age", "22");
-        mav.addObject("picture", "img/users/josh.jpg");
-        mav.addObject("interestList", interestList);
+        List<WrapperInfo> users = this.callRS.getRS(user.getRsId());
+
+        for (Integer index = 0; index < users.size(); index++) {
+            users.get(index).setGlobalName(users.get(index).firstName + " " + users.get(index).lastName);
+        }
+        mav.addObject("userList", users);
         mav.setViewName("main");
         return mav;
     }
@@ -59,22 +62,14 @@ public class MainController {
         if (userRepository.existsByUsername(info.personName)) {
             return "Error: An account with this email already exist!";
         }
+        String rsId = this.callRS.addUserToRs(info.personName, info.lastName, info.getInterest());
         List<String> tmp = info.getInterest();
         User user = new User();
         user.setUsername(info.personName);
+        user.setLastname(info.lastName);
+        user.setRsId(rsId);
         user.setPassword(encoder.encode(info.password));
         userRepository.save(user);
-
-        RestTemplate restTemplate = new RestTemplate();
-        JSONObject personJsonObject = new JSONObject();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        personJsonObject.put("first_name", "Jean");
-        personJsonObject.put("last_name", "Jacques");
-        personJsonObject.put("interests", info.getInterest());
-        final HttpEntity<String> entity = new HttpEntity<String>(personJsonObject.toString(), headers);
-        ResponseEntity<String> res = restTemplate.exchange("http://localhost:8080/users", HttpMethod.POST, entity, String.class);
-        System.out.println(res.getStatusCodeValue());
         return "redirect:/signin";
     }
 }

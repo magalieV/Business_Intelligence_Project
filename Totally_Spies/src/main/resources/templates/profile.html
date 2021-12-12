@@ -8,25 +8,20 @@
     <script src="js/profile.js"></script>
 </head>
 <body>
+<a href="/main">Return</a>
     <div class="background">
         <img th:src="${picture}" alt="User"><br><br>
+        <p id="user-name" th:text="${username}"></p>
         <!--<img src="../static/img/user.png" alt="User"><br><br>-->
     </div>
 <div class="box-information">
     <div id="information">
         <form>
             <div class="background">
-                <br>
-                <b>User Name : </b><br><br>
                <!-- <label for="user-name">Tina Rose</label><br><br>-->
-               <p id="user-name" th:text="${username}"></p>
                 <b>Birth Date : <br /><br>
                     <input type="date" name="date" value="1997-07-22"/>
-                <p><label>User Gender: </label> <br><br>
-                    <input type="radio" name="type" value="Miss" checked/>Miss<br>
-                    <input type="radio" name="type" value="Mr"/>Mr<br>
-                    <input type="radio" name="type" value="Other"/>Other<br>
-                </p>
+                </b>
             </div>
         </form>
     </div>
@@ -35,62 +30,79 @@
     <div id="container">
         <form>
             <br>
-            <label for="name">Add An Interest :</label><br>
-            <input type="text" id="name" placeholder="Enter an interest" autocomplete="off"><br>
-            <button id="btnAdd">Add</button><br><br>
-            <label for="list">List Of Interest :</label><br><br>
+            <label for="interest_list">Add An Interest :</label><br>
+            <select id="interest_list" name="interestList">
+                <optgroup label="Sport">
+                    <option>Football</option>
+                    <option>Basketball</option>
+                    <option>Tennis</option>
+                    <option>Baseball</option>
+                </optgroup>
+                <optgroup label="Music">
+                    <option>Hip-Hop</option>
+                    <option>Pop</option>
+                    <option>Electro</option>
+                    <option>K-Pop</option>
+                </optgroup>
+                <optgroup label="Enrichment Hobbies">
+                    <option>Foreign Language Study</option>
+                    <option>Reading</option>
+                    <option>Blogging</option>
+                    <option>Writing</option>
+                </optgroup>
+                <optgroup label="Creative Hobbies">
+                    <option>Drawing</option>
+                    <option>Painting</option>
+                    <option>Photography</option>
+                    <option>Scrapbooking</option>
+                </optgroup>
+            </select>
+            <button class="submit-button" type="button" id="add_element">Add Interest</button>
+            <p>List Of Interest :</p>
             <div id="interest">
-                <div th:each = "element : ${interestList}">
-                    <span th:text="${element}"></span>
+                <div th:each = "element : ${interestList}" id="list-interest">
+                    <span th:text="${element}" class="interest-info"></span>
+                    <img src="/img/icon/cross.png" class="same_line" alt="Close button"/>
                 </div>
             </div>
-            <select id="list" name="list" multiple></select><br><br>
-            <button id="btnRemove">Remove Selected Interest</button>
         </form>
     </div>
 </div><br>
 <script>
-    const btnAdd = document.querySelector('#btnAdd');
-        const btnRemove = document.querySelector('#btnRemove');
-        const sb = document.querySelector('#list');
-        const name = document.querySelector('#name');
+        let selectInterest = document.getElementById("interest_list");
+        const list = document.getElementById("list-interest");
+        let add = document.getElementById("add_element");
+        let closeBtn = document.getElementsByClassName("same_line");
 
-        btnAdd.onclick = (e) => {
-            e.preventDefault();
-
-            // validate the option
-            if (name.value == '') {
-                alert('Please enter the name.');
-                return;
-            }
-            // create a new option
-            const option = new Option(name.value, name.value);
-            // add it to the list
-            sb.add(option, undefined);
-
-            // reset the value of the input
-            name.value = '';
-            name.focus();
-        };
-
-        // remove selected option
-        btnRemove.onclick = (e) => {
-            e.preventDefault();
-
-            // save the selected option
-            let selected = [];
-
-            for (let i = 0; i < sb.options.length; i++) {
-                selected[i] = sb.options[i].selected;
+        for (let i = 0; i < closeBtn.length; i++) {
+            closeBtn[i].addEventListener("click", function () {
+                list.removeChild(list.parentNode);
+            });
             }
 
-            // remove all selected option
-            let index = sb.options.length;
-            while (index--) {
-                if (selected[index]) {
-                    sb.remove(index);
+        add.addEventListener("click", function() {
+            let interestL = document.getElementsByClassName("interest-info");
+
+            if (selectInterest.value && selectInterest.value.trim().length > 1) {
+                for (let i = 0; i < interestL.length; i++) {
+                    if (selectInterest.value === interestL[i].innerHTML)
+                        return;
                 }
+                let container = document.createElement("p");
+                let newNode = document.createElement("span");
+                let img = document.createElement("img");
+                img.src = "/img/icon/cross.png";
+                img.className = "same_line";
+                newNode.className = "interest-info";
+                newNode.innerHTML = selectInterest.value;
+                container.appendChild(newNode);
+                container.appendChild(img);
+                list.appendChild(container);
+                img.addEventListener("click", function () {
+                    list.removeChild(container);
+                })
             }
-        };
+
+        });
 </script>
 </body>

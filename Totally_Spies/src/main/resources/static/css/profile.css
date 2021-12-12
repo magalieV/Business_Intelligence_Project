@@ -3,7 +3,7 @@ html, body {
 }
 
 body {
-    background-color: beige;
+    background-color: lightgray;
     margin: 0;
     width: 100%;
 }
@@ -22,24 +22,28 @@ img {
     text-align: center;
 }
 
+#user-lastname {
+    display: inline-block;
+}
+
 .box-list {
     width: 46%;
-    height: 53%;
-    background-color:rgb(221, 221, 189);
+    height: auto;
+    background-color:white;
     margin: auto;
     padding: 0 30px 20px;
-    border: solid 5px rgb(167, 167, 114);
+    border: solid 5px grey;
     border-radius: 30px;
     color: rgba(6, 2, 37, 0.801);
 }
 
 .box-information {
     width: 46%;
-    height: 30%;
-    background-color:rgb(221, 221, 189);
+    height: auto;
+    background-color:white;
     margin: auto;
     padding: 0 30px 20px;
-    border: solid 5px rgb(167, 167, 114);
+    border: solid 5px grey;
     border-radius: 30px;
     color: rgba(6, 2, 37, 0.801);
 }
@@ -76,4 +80,15 @@ h2 {
     border: none;
     margin-top: 1em;
 	height: 7%;
+}
+
+.same_line {
+    display: inline-block;
+    width: 20px;
+    padding-left: 10px;
+    height: 20px;
+}
+
+.interest-info {
+    display: inline-block;
 }

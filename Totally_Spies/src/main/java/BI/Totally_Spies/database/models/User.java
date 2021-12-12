@@ -18,6 +18,13 @@ public class User implements Serializable, UserDetails {
     private Integer userId; ///< The user id.
     private String username; ///< The user name.
     private String password; ///< The user password.
+    private String lastname;
+    private String rsId;
+
+    public String getRsId() {return rsId;}
+    public void setRsId(String rsId) {this.rsId = rsId;}
+    public String getLastname() {return lastname;}
+    public void setLastname(String lastname) {this.lastname = lastname;}
 
     ///
     /// Get the user id.
