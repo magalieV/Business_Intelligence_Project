@@ -9,22 +9,58 @@ firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
+all_hobbies = ["Football", "Basketball", "Tennis", "Baseball", "Hip-Hop", "Pop", "Electro", "K-Pop",
+               "Foreign Language Study", "Reading", "Blogging", "Writing"]
 
 def add_users(nb_users):
     for i in range(nb_users):
-        interests = []
-        for j in range(10):
-            interests.append("interest" + str(random.randint(1, 217)))
+        interests = random.sample(all_hobbies, 3)
+        print(interests)
         user = {
             u'first name': names.get_first_name(),
             u'last name': names.get_last_name(),
-            u'interests': interests
+            u'interests': interests,
+            u'points': get_user_points(interests)
         }
 
-        user_interests_dict = {interest: "1" for interest in user['interests']}
-        right_group = find_right_group(user_interests_dict)
+        db.collection(u'totallySpies').document("all_users").collection('users').add(user)
 
-        db.collection(u'totallySpies').document(right_group).collection('users').add(user)
+def get_user_points(user_interests):
+    creative_group = parse_interest('Creative')['Hobbies']
+    enrichment_group = parse_interest('Enrichment')['Hobbies']
+    musique_group = parse_interest('Musique')['Hobbies']
+    sport_group = parse_interest('Sport')['Hobbies']
+
+    creative_points = 0
+    enrichment_points = 0
+    musique_points = 0
+    sport_points = 0
+
+    all_groups = {
+        "Creative": creative_group,
+        "Enrichment": enrichment_group,
+        "Music": musique_group,
+        "Sport": sport_group
+    }
+
+    for key, value in all_groups.items():
+        for hobby in value:
+            for user_interest in user_interests:
+                if user_interest == hobby and key == "Creative":
+                    creative_points += 1
+                elif user_interest == hobby and key == "Enrichment":
+                    enrichment_points += 1
+                elif user_interest == hobby and key == "Music":
+                    musique_points += 1
+                elif user_interest == hobby and key == "Sport":
+                    sport_points += 1
+
+    return {
+        "Creative": creative_points,
+        "Enrichment": enrichment_points,
+        "Music": musique_points,
+        "Sport": sport_points
+    }
 
 def get_user(document_name):
     all_groups = ["C", "I", "P", "R"]
@@ -51,10 +87,12 @@ def parse_interest(document_name):
 
 
 def find_right_group(user_interests):
-    interest_group_c = parse_interest('C')
-    interest_group_i = parse_interest('I')
-    interest_group_p = parse_interest('P')
-    interest_group_r = parse_interest('R')
+    interest_group_c = parse_interest('Creative')
+    interest_group_i = parse_interest('Enrichment')
+    interest_group_p = parse_interest('Musique')
+    interest_group_r = parse_interest('Sport')
+    print(interest_group_c)
+
     groups_dict = {
         "I": set(interest_group_i),
         "P": set(interest_group_p),
@@ -80,8 +118,6 @@ def find_right_group(user_interests):
             right_group['group'].append(key)
             right_group['value'].append(value.intersection(set_user))
 
-        print("Group : {}, Common interests : {}".format(key, value.intersection(set_user)))
-    print("\n// Match Groups : {}\n// Common interests : {}".format(right_group['group'], right_group['value']))
     return right_group['group']
 
 
@@ -117,7 +153,8 @@ def main():
     # }
 
     #find_right_group(user_interest_form)
-    print(get_user("eT1plVcx7CO1PND23gQB"))
+    add_users(100)
+    #find_right_group("ok")
 
 if __name__ == "__main__":
     main()

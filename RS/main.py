@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, firestore
+import random
 
 cred = credentials.Certificate("hallowed-welder-297014-042131c68dd6.json")
 firebase_admin.initialize_app(cred)
@@ -9,41 +10,73 @@ db = firestore.client()
 
 app = Flask(__name__)
 
+Sport = ["Football", "Basketball", "Tennis", "Baseball"]
+Musique = ["Hip-Hop", "Pop", "Electro", "K-Pop"]
+Enrichment = ["Foreign Language Study", "Reading", "Blogging", "Writing"]
+Creative = ["Drawing", "Painting", "Photography", "Scrapbooking"]
 
 @app.route('/')
 def index():
      return "TotallySpies is so Fun hihi"
 
 
+@app.route('/user_info', methods=['PUT'])
+def update_user_info():
+    user = {
+        'first_name': request.json['first_name'],
+        'last_name': request.json['last_name'],
+        'interests': request.json['interests']
+    }
+
+    user_points = get_user_points(user['interests'])
+
+    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.args.get("user_id"))
+    doc_ref.update({
+        db.field_path(u'first name'): user['first_name'],
+        db.field_path(u'last name'): user['last_name'],
+        u'interests': user['interests'],
+        u'points': user_points
+    })
+    return jsonify(doc_ref.id)
+
+
 @app.route('/user_info', methods=['GET'])
 def get_user_info():
-    all_groups = ["C", "I", "P", "R"]
     document_name = request.args.get("user_id")
 
-    for i in all_groups:
-        doc_ref = db.collection(u'totallySpies').document(i).collection('users').document(document_name)
-        doc = doc_ref.get()
-        if doc.exists:
-            return jsonify(doc.to_dict())
+    doc_ref = db.collection(u'totallySpies').document('all_users').collection('users').document(document_name)
+    doc = doc_ref.get()
+    if doc.exists:
+        return jsonify(doc.to_dict())
 
 
 @app.route('/matched_users', methods=['GET'])
 def get_user_possible_matchable_users():
-    all_groups = ["C", "I", "P", "R"]
     all_users_in_group = None
     document_name = request.args.get("user_id")
 
-    for i in all_groups:
-        doc_ref = db.collection(u'totallySpies').document(i).collection('users').document(document_name)
-        doc = doc_ref.get()
-        if doc.exists:
-            print(doc.to_dict())
-            all_users_in_group = db.collection('totallySpies').document(i).collection('users').stream()
-            break
+    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(document_name)
+    doc = doc_ref.get()
+    if doc.exists:
+        all_users_in_group = db.collection('totallySpies').document("all_users").collection('users').stream()
+
     all_users = []
     for users in all_users_in_group:
         all_users.append({k: v for k, v in users.to_dict().items() if v})
-    return jsonify(all_users)
+
+    user_points = doc.to_dict()["points"]
+    algo_list = []
+    for key, value in user_points.items():
+        for i in range(value):
+            algo_list.append(key)
+
+    final_list = []
+    while len(final_list) != 5:
+        user = random.choice(all_users)
+        for key, value in user["points"].items():
+            if key == random.choice(algo_list) and value > 0:
+                final_list.append(user)
+    return jsonify(final_list)
 
 
 @app.route('/users', methods=['POST'])
@@ -54,54 +87,56 @@ def add_user():
         'interests': request.json['interests']
     }
 
-    user_interests_dict = {interest: "1" for interest in user['interests']}
-    right_group = find_right_group(user_interests_dict)
+    user_points = get_user_points(user['interests'])
 
     data = {
         u'first name': user['first_name'],
         u'last name': user['last_name'],
-        u'interests': user['interests']
+        u'interests': user['interests'],
+        u'points': user_points
     }
 
-    #for i in right_group:
-    #    db.collection(u'totallySpies').document(i).collection('users').add(data)
-    doc_ref = db.collection(u'totallySpies').document(right_group[0]).collection('users').document()
-    #right_group.append(doc_ref)
+    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document()
     doc_ref.set(data)
     return jsonify(doc_ref.id)
 
 
-def find_right_group(user_interests):
-    interest_group_c = parse_interest('C')
-    interest_group_i = parse_interest('I')
-    interest_group_p = parse_interest('P')
-    interest_group_r = parse_interest('R')
-    groups_dict = {
-        "I": set(interest_group_i),
-        "P": set(interest_group_p),
-        "R": set(interest_group_r),
-        "C": set(interest_group_c)
-    }
-    set_user = set(user_interests)
-    right_group = {
-        "group": [],
-        "value": []
+def get_user_points(user_interests):
+    creative_group = parse_interest('Creative')['Hobbies']
+    enrichment_group = parse_interest('Enrichment')['Hobbies']
+    musique_group = parse_interest('Musique')['Hobbies']
+    sport_group = parse_interest('Sport')['Hobbies']
+
+    creative_points = 0
+    enrichment_points = 0
+    musique_points = 0
+    sport_points = 0
+
+    all_groups = {
+        "Creative": creative_group,
+        "Enrichment": enrichment_group,
+        "Music": musique_group,
+        "Sport": sport_group
     }
 
-    for key, value in groups_dict.items():
-        if not right_group['group']:
-            right_group['group'].append(key)
-            right_group['value'].append(value.intersection(set_user))
-        elif len(right_group['value'][0]) < len(value.intersection(set_user)):
-            right_group['group'].clear()
-            right_group['value'].clear()
-            right_group['group'].append(key)
-            right_group['value'].append(value.intersection(set_user))
-        elif len(right_group['value'][0]) == len(value.intersection(set_user)):
-            right_group['group'].append(key)
-            right_group['value'].append(value.intersection(set_user))
+    for key, value in all_groups.items():
+        for hobby in value:
+            for user_interest in user_interests:
+                if user_interest == hobby and key == "Creative":
+                    creative_points += 1
+                elif user_interest == hobby and key == "Enrichment":
+                    enrichment_points += 1
+                elif user_interest == hobby and key == "Music":
+                    musique_points += 1
+                elif user_interest == hobby and key == "Sport":
+                    sport_points += 1
 
-    return right_group['group']
+    return {
+        "Creative": creative_points,
+        "Enrichment": enrichment_points,
+        "Music": musique_points,
+        "Sport": sport_points
+    }
 
 
 def parse_interest(document_name):
