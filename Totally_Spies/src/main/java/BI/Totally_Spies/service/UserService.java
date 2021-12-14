@@ -44,4 +44,12 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
+
+    public void updateUser(User user, String id) {
+        this.userRepository.updateById(user.getUserId(), id);
+    }
+
+    public User getUser(Integer id) {
+        return this.userRepository.findByUserId(id);
+    }
 }

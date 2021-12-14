@@ -13,6 +13,7 @@ public class WrapperInfo {
     public List<String> interests;
     public String lastName;
     public String globalName;
+    public String picture;
 
     public List<String> getInterest() {return interests;}
     public String getPassword() {return password;}
@@ -20,6 +21,7 @@ public class WrapperInfo {
     public String getLastName() {return lastName;}
     public String getGlobalName() {return globalName;}
     public String getFirstName() {return firstName;}
+    public String getPicture() {return picture;}
 
     public void setLastName(String lastName) {this.lastName = lastName;}
     public void setInterest(List<String> interest) {this.interests = interest;}
@@ -27,4 +29,5 @@ public class WrapperInfo {
     public void setPersonName(String personName) {this.personName = personName;}
     public void setGlobalName(String globalName) {this.globalName = globalName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}
+    public void setPicture(String picture) {this.picture = picture;}
 }

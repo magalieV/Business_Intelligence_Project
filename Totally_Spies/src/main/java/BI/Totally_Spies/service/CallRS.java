@@ -50,4 +50,22 @@ public class CallRS {
         ResponseEntity<List<WrapperInfo>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<WrapperInfo>>() {});
         return response.getBody();
     }
+
+    public String saveNewInterestList(String id, List<String> interest, String username, String lastName) {
+        RestTemplate restTemplate = new RestTemplate();
+        JSONObject personJsonObject = new JSONObject();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String tmp = id.replace("\"", "");
+        String t = tmp.replace("\n", "");
+        personJsonObject.put("userId", t);
+        personJsonObject.put("firstName", username);
+        personJsonObject.put("lastName", lastName);
+        personJsonObject.put("interests", interest);
+
+        String url = "http://localhost:8080/user_info";
+        final HttpEntity<String> entity = new HttpEntity<String>(personJsonObject.toString(), headers);
+        ResponseEntity<String> res = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        return res.getBody();
+    }
 }

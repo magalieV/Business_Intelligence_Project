@@ -21,7 +21,7 @@
 
 @media (min-width: 768px) {
     #user_picture {
-        max-width: 40%;
+        max-width: 80%;
         height: auto;
         margin-left: 0;
         float: left;
@@ -117,7 +117,7 @@
         padding-top: 0;
     }
     #user_picture {
-        max-width: 40%;
+        max-width: 80%;
         height: auto;
         display: block;
         margin-left: auto;
@@ -147,6 +147,7 @@ span {
     display: inline-block;
     width: auto;
     text-align: left;
+    max-width: 40%;
 }
 
 #centerAll {

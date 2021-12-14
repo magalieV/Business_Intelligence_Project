@@ -5,7 +5,9 @@ import BI.Totally_Spies.database.WrapperInfo;
 import BI.Totally_Spies.database.models.User;
 import BI.Totally_Spies.database.repositories.UserRepository;
 import BI.Totally_Spies.service.CallRS;
+import BI.Totally_Spies.service.Hash;
 import BI.Totally_Spies.service.UserInformation;
+import BI.Totally_Spies.service.UserService;
 import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,17 +32,23 @@ public class MainController {
     PasswordEncoder encoder;
     @Autowired
     UserInformation userInformation;
+    @Autowired
+    UserService userService;
     private CallRS callRS = new CallRS();
 
     @RequestMapping("/main")
     public ModelAndView getHomePage(@AuthenticationPrincipal OAuth2User principal) {
         ModelAndView mav = new ModelAndView();
-        User user = userInformation.getInformation(principal);
+        User userT = userInformation.getInformation(principal);
+        User user = this.userService.getUser(userT.getUserId());
 
         List<WrapperInfo> users = this.callRS.getRS(user.getRsId());
 
         for (Integer index = 0; index < users.size(); index++) {
-            users.get(index).setGlobalName(users.get(index).firstName + " " + users.get(index).lastName);
+            String name = users.get(index).firstName + " " + users.get(index).lastName;
+            users.get(index).setGlobalName(name);
+            String url = "https://www.gravatar.com/avatar/" + Hash.md5Hex(users.get(index).getFirstName()) + "?d=robohash";
+            users.get(index).setPicture(url);
         }
         mav.addObject("userList", users);
         mav.setViewName("main");

@@ -2,7 +2,7 @@ server:
   port: 8081
 jwt:
   secret: qrSsuGQaPWHyjwWTyVe
-  expirationDateInMs: 86400000
+  expirationDateInMs: 2592000000
 spring:
   h2:
     console:

@@ -3,12 +3,16 @@ html, body {
 }
 
 body {
-    background-color: lightgray;
     margin: 0;
     width: 100%;
 }
 
-img {
+.container {
+    text-align: center;
+    width: 50%;
+}
+
+#imageUser {
     width: 200px;
     margin-top: 3em;
     display: block;
@@ -26,69 +30,66 @@ img {
     display: inline-block;
 }
 
-.box-list {
-    width: 46%;
-    height: auto;
-    background-color:white;
-    margin: auto;
-    padding: 0 30px 20px;
-    border: solid 5px grey;
-    border-radius: 30px;
-    color: rgba(6, 2, 37, 0.801);
-}
-
-.box-information {
-    width: 46%;
-    height: auto;
-    background-color:white;
-    margin: auto;
-    padding: 0 30px 20px;
-    border: solid 5px grey;
-    border-radius: 30px;
-    color: rgba(6, 2, 37, 0.801);
-}
-
-#name {
-    margin-bottom: 2em;
-    margin-top: 3em;
-    background-color: rgb(214, 214, 187);
-}
-
-#btnAdd, #btnRemove {
-    background-color: rgb(167, 167, 114);
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-}
-
-#list {
-    background-color: rgb(214, 214, 187); 
-    height: 10em;
-    width: 20em;
-}
-
 h2 {
     font-size: medium;
 }
 
-#interest-select {
-    background-color: rgb(167, 167, 114);
-    border: none;
-    margin-top: 1em;
-	height: 7%;
+#elementInterest {
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
 .same_line {
     display: inline-block;
     width: 20px;
     padding-left: 10px;
-    height: 20px;
+    height: auto;
 }
 
 .interest-info {
     display: inline-block;
+}
+
+@media (max-width: 767px) {
+    #information {
+        margin: 1em 0 0;
+        padding-bottom: 1em;
+        border-top: 0.1em solid grey;
+    }
+
+    #logo {
+        width: 40%;
+        height: auto;
+        margin: 0.4em 0.4em 0.4em 0.4em;
+    }
+
+    .box-list {
+        border: 0.1em solid #c0c0c0;
+        display: block;
+        padding: 1em 1em 1em 1em;
+        margin: 2em 2em 2em 2em;
+        box-shadow: 0.2em 0.2em 0.2em #c0c0c0;
+        border-radius: 0.5em;
+    }
+}
+
+@media (min-width: 768px) {
+    #logo {
+        width: 20%;
+        height: auto;
+        margin: 0.4em 0.4em 0.4em 0.4em;
+    }
+    .center {
+        margin: 1.2em;
+        text-align: justify;
+    }
+    .box-list {
+        border: 0.1em solid #c0c0c0;
+        height: auto;
+        overflow: auto;
+        padding: 1em 1em 1em 1em;
+        margin: 2em 2em 2em 2em;
+        box-shadow: 0.2em 0.2em 0.2em #c0c0c0;
+        border-radius: 0.5em;
+    }
 }

@@ -22,7 +22,7 @@
 <section id="centerAll">
     <div class="usersRecomandation" th:each = "user : ${userList}">
         <div class="card">
-            <img id="user_picture" title="user_picture" alt="Photo" src="img/user.png"/>
+            <img id="user_picture" title="user_picture" alt="Photo" th:src="${user.picture}"/>
             <div id="card-part">
                 <div id="information">
                     <div id="main-information">
