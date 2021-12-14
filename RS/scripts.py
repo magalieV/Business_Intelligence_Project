@@ -10,20 +10,31 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 all_hobbies = ["Football", "Basketball", "Tennis", "Baseball", "Hip-Hop", "Pop", "Electro", "K-Pop",
-               "Foreign Language Study", "Reading", "Blogging", "Writing"]
+               "Foreign Language Study", "Reading", "Blogging", "Writing", "Drawing", "Painting", "Photography",
+               "Scrapbooking"]
+
 
 def add_users(nb_users):
     for i in range(nb_users):
         interests = random.sample(all_hobbies, 3)
         print(interests)
+        user_points = get_user_points(interests)
         user = {
             u'firstName': names.get_first_name(),
             u'lastName': names.get_last_name(),
             u'interests': interests,
             u'points': get_user_points(interests)
         }
-
-        db.collection(u'totallySpies').document("all_users").collection('users').add(user)
+        if user_points["Creative"] >= 2:
+            db.collection(u'totallySpies').document("creative_users").collection('users').add(user)
+        elif user_points["Enrichment"] >= 2:
+            db.collection(u'totallySpies').document("enrichment_users").collection('users').add(user)
+        elif user_points["Music"] >= 2:
+            db.collection(u'totallySpies').document("music_users").collection('users').add(user)
+        elif user_points["Sport"] >= 2:
+            db.collection(u'totallySpies').document("sport_users").collection('users').add(user)
+        else:
+            db.collection(u'totallySpies').document("balanced_users").collection('users').add(user)
 
 def get_user_points(user_interests):
     creative_group = parse_interest('Creative')['Hobbies']
@@ -153,7 +164,7 @@ def main():
     # }
 
     #find_right_group(user_interest_form)
-    add_users(1000)
+    add_users(100)
     #find_right_group("ok")
 
 if __name__ == "__main__":

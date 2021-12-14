@@ -15,13 +15,19 @@ Musique = ["Hip-Hop", "Pop", "Electro", "K-Pop"]
 Enrichment = ["Foreign Language Study", "Reading", "Blogging", "Writing"]
 Creative = ["Drawing", "Painting", "Photography", "Scrapbooking"]
 
+
 @app.route('/')
 def index():
      return "TotallySpies is so Fun hihi"
 
-
+# request.json["userId"]
 @app.route('/user_info', methods=['POST'])
 def update_user_info():
+    document_name = request.json["userId"]
+
+    user_group = get_user_group(document_name)
+    db.collection(u'totallySpies').document(user_group).collection('users').document(document_name).delete()
+
     user = {
         'firstName': request.json['firstName'],
         'lastName': request.json['lastName'],
@@ -30,13 +36,27 @@ def update_user_info():
 
     user_points = get_user_points(user['interests'])
 
-    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(request.json["userId"])
-    doc_ref.update({
-        db.field_path(u'firstName'): user['firstName'],
-        db.field_path(u'lastName'): user['lastName'],
+    data = {
+        u'firstName': user['firstName'],
+        u'lastName': user['lastName'],
         u'interests': user['interests'],
         u'points': user_points
-    })
+    }
+    if user_points["Creative"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("creative_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Enrichment"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("enrichment_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Music"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("music_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Sport"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("sport_users").collection('users').document()
+        doc_ref.set(data)
+    else:
+        doc_ref = db.collection(u'totallySpies').document("balanced_users").collection('users').document()
+        doc_ref.set(data)
     return jsonify(doc_ref.id)
 
 
@@ -44,7 +64,9 @@ def update_user_info():
 def get_user_info():
     document_name = request.args.get("user_id")
 
-    doc_ref = db.collection(u'totallySpies').document('all_users').collection('users').document(document_name)
+    user_group = get_user_group(document_name)
+
+    doc_ref = db.collection(u'totallySpies').document(user_group).collection('users').document(document_name)
     doc = doc_ref.get()
     if doc.exists:
         return jsonify(doc.to_dict())
@@ -55,27 +77,21 @@ def get_user_possible_matchable_users():
     all_users_in_group = None
     document_name = request.args.get("user_id")
 
-    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document(document_name)
+    user_group = get_user_group(document_name)
+
+    doc_ref = db.collection(u'totallySpies').document(user_group).collection('users').document(document_name)
     doc = doc_ref.get()
     if doc.exists:
-        all_users_in_group = db.collection('totallySpies').document("all_users").collection('users').stream()
+        all_users_in_group = db.collection('totallySpies').document(user_group).collection('users').stream()
 
     all_users = []
     for users in all_users_in_group:
         all_users.append({k: v for k, v in users.to_dict().items() if v})
 
-    user_points = doc.to_dict()["points"]
-    algo_list = []
-    for key, value in user_points.items():
-        for i in range(value):
-            algo_list.append(key)
-
     final_list = []
     while len(final_list) != 5:
         user = random.choice(all_users)
-        for key, value in user["points"].items():
-            if key == random.choice(algo_list) and value > 0:
-                final_list.append(user)
+        final_list.append(user)
     return jsonify(final_list)
 
 
@@ -95,10 +111,34 @@ def add_user():
         u'interests': user['interests'],
         u'points': user_points
     }
-
-    doc_ref = db.collection(u'totallySpies').document("all_users").collection('users').document()
-    doc_ref.set(data)
+    if user_points["Creative"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("creative_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Enrichment"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("enrichment_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Music"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("music_users").collection('users').document()
+        doc_ref.set(data)
+    elif user_points["Sport"] >= 2:
+        doc_ref = db.collection(u'totallySpies').document("sport_users").collection('users').document()
+        doc_ref.set(data)
+    else:
+        doc_ref = db.collection(u'totallySpies').document("balanced_users").collection('users').document()
+        doc_ref.set(data)
     return jsonify(doc_ref.id)
+
+
+def get_user_group(document_name):
+    all_groups = ["creative_users", "enrichment_users", "sport_users", "music_users", "balanced_users"]
+    all_users_in_group = None
+
+    for group in all_groups:
+        doc_ref = db.collection(u'totallySpies').document(group).collection('users').document(document_name)
+        doc = doc_ref.get()
+        if doc.exists:
+            return group
+            # return db.collection('totallySpies').document(i).collection('users').stream()
 
 
 def get_user_points(user_interests):
